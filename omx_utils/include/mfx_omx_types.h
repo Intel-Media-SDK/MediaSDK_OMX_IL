@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2018 Intel Corporation
+// Copyright (c) 2011-2019 Intel Corporation
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -166,6 +166,7 @@ union MfxOmxExtBuffer
     mfxExtCodingOption3 opt3;
     mfxExtEncoderResetOption reset;
     mfxExtAvcTemporalLayers tempLayers;
+    mfxExtVP9Param vp9param;
     mfxExtVideoSignalInfo vsi;
     mfxExtEncoderROI roi;
 };
