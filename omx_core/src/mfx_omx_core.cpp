@@ -324,6 +324,10 @@ static OMX_ERRORTYPE mfx_omx_read_config_file(void)
             {
                 g_ComponentsRegistry = components;
 
+                if ((strlen(name) >= (OMX_MAX_STRINGNAME_SIZE - 1)) ||
+                    (strlen(value) >= (OMX_MAX_STRINGNAME_SIZE - 1))) {
+                    return OMX_ErrorBadParameter;
+                }
                 strcpy(g_ComponentsRegistry[g_ComponentsRegistryNum].m_component_name, name);
                 strcpy(g_ComponentsRegistry[g_ComponentsRegistryNum].m_component_so, value);
                 g_ComponentsRegistry[g_ComponentsRegistryNum].m_component_flags =
