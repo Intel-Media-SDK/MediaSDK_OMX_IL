@@ -314,4 +314,87 @@ OMX_U32 MfxOmxDevAndroid::GetDecProcessingRate(mfxVideoParam const & par)
     return processing_rate;
 }
 
+/*------------------------------------------------------------------------------*/
+
+VAProfile MfxOmxDevAndroid::ConvertProfileTypeMFX2VAAPI(OMX_U32 id, OMX_U32 type)
+{
+    VAProfile vaProfile;
+
+    if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_CONSTRAINED_BASELINE == type))
+    {
+        vaProfile = VAProfileH264ConstrainedBaseline;     
+    }
+    else if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_BASELINE == type))
+    {
+        vaProfile = VAProfileH264Baseline;
+    }
+    else if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_MAIN == type))
+    {
+        vaProfile = VAProfileH264Main;
+    }
+    else if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_HIGH == type))
+    {
+        vaProfile = VAProfileH264High;
+    }
+    else if ((MFX_CODEC_HEVC == id) && (MFX_PROFILE_HEVC_MAIN10 == type))
+    {
+        vaProfile = VAProfileHEVCMain10;
+    }
+    else if ((MFX_CODEC_HEVC == id) && (MFX_PROFILE_HEVC_MAIN == type))
+    {
+        vaProfile = VAProfileHEVCMain;
+    }
+    else if ((MFX_CODEC_VP9 == id) && (MFX_PROFILE_VP9_0 == type))
+    {
+        vaProfile = VAProfileVP9Profile0; 
+    }
+    else if ((MFX_CODEC_VP9 == id) && (MFX_PROFILE_VP9_1 == type))
+    {
+        vaProfile = VAProfileVP9Profile1;
+    }
+    else if ((MFX_CODEC_VP9 == id) && (MFX_PROFILE_VP9_2 == type))
+    {
+        vaProfile = VAProfileVP9Profile2;
+    }
+    else if ((MFX_CODEC_VP9 == id) && (MFX_PROFILE_VP9_3 == type))
+    {
+        vaProfile = VAProfileVP9Profile3;
+    }
+    else
+    {
+        vaProfile = VAProfileNone;
+    }
+ 
+    return vaProfile;
+}
+
+/*------------------------------------------------------------------------------*/
+
+mfxStatus MfxOmxDevAndroid::GetMaxPictureResolutionSupported(mfxVideoParam const & par, OMX_U32 *maxWidth, OMX_U32 *maxHeight)
+{
+
+    VAConfigAttrib attr[2] = { { VAConfigAttribMaxPictureWidth, 0 }, { VAConfigAttribMaxPictureHeight, 0 } };
+
+    VAStatus vaSts = vaGetConfigAttributes(m_vaDpy,
+                          ConvertProfileTypeMFX2VAAPI(par.mfx.CodecId, par.mfx.CodecProfile),
+                          VAEntrypointVLD,
+                          attr, 2);
+    if (vaSts != VA_STATUS_SUCCESS)
+    {
+        return MFX_ERR_UNKNOWN;
+    }
+
+    if (attr[0].value == VA_ATTRIB_NOT_SUPPORTED || attr[1].value == VA_ATTRIB_NOT_SUPPORTED)
+    {
+        return MFX_ERR_UNSUPPORTED;
+    }
+    else
+    {
+        *maxWidth = attr[0].value;
+        *maxHeight = attr[1].value;
+    }
+
+    return MFX_ERR_NONE;
+}
+
 #endif // #ifdef LIBVA_SUPPORT

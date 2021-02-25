@@ -61,6 +61,8 @@ public:
 
     virtual OMX_U32 GetDecProcessingRate(mfxVideoParam const & par);
 
+    virtual mfxStatus GetMaxPictureResolutionSupported(mfxVideoParam const & par, OMX_U32 *maxWidth, OMX_U32 *maxHeight);
+
 protected:
     bool m_bInitialized;
     MfxOmxAndroidDisplay* m_Display;
@@ -70,6 +72,8 @@ protected:
     MfxOmxGrallocAllocator*    m_pGrallocAllocator;
 
     eMfxOmxHwType m_platformType;
+
+    virtual VAProfile ConvertProfileTypeMFX2VAAPI(OMX_U32 id, OMX_U32 type);
 
 private:
     MFX_OMX_CLASS_NO_COPY(MfxOmxDevAndroid)

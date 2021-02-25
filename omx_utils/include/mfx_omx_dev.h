@@ -42,6 +42,8 @@ public:
 
     virtual OMX_U64 GetDriverVersion(void) = 0;
     virtual OMX_U32 GetDecProcessingRate(mfxVideoParam const & par) = 0;
+
+    virtual mfxStatus GetMaxPictureResolutionSupported(mfxVideoParam const & par, OMX_U32 *maxWidth, OMX_U32 *maxHeight) = 0;
 };
 
 /*------------------------------------------------------------------------------*/
