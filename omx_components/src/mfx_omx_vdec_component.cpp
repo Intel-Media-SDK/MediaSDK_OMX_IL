@@ -2215,9 +2215,23 @@ mfxStatus MfxOmxVdecComponent::InitCodec(void)
         }
         if (MFX_ERR_NONE == mfx_res)
         {
-            if (m_MfxVideoParams.mfx.FrameInfo.Width > 4096 || m_MfxVideoParams.mfx.FrameInfo.Height > 4096)
+            OMX_U32 maxWidth = 0, maxHeight = 0;
+            if (m_pDevice)
             {
-                mfx_res = MFX_ERR_UNSUPPORTED;
+                mfx_res = m_pDevice->GetMaxPictureResolutionSupported(m_MfxVideoParams, &maxWidth, &maxHeight);
+                if (MFX_ERR_NONE != mfx_res)
+                {
+                    MFX_OMX_AUTO_TRACE_MSG("Failed to get max picture resolution");
+                    mfx_res = MFX_ERR_UNSUPPORTED;
+                }
+                if (m_MfxVideoParams.mfx.FrameInfo.Width > maxWidth || m_MfxVideoParams.mfx.FrameInfo.Height > maxHeight)
+                {
+                    mfx_res = MFX_ERR_UNSUPPORTED;
+                }
+            }
+            else
+            {
+                mfx_res = MFX_ERR_DEVICE_FAILED;
             }
         }
         if (MFX_ERR_NONE == mfx_res)
@@ -2539,9 +2553,23 @@ mfxStatus MfxOmxVdecComponent::ReinitCodec(void)
     }
     if (MFX_ERR_NONE == mfx_res)
     {
-        if (newVideoParams.mfx.FrameInfo.Width > 4096 || newVideoParams.mfx.FrameInfo.Height > 4096)
+        OMX_U32 maxWidth = 0, maxHeight = 0;
+        if (m_pDevice)
         {
-            mfx_res = MFX_ERR_UNSUPPORTED;
+            mfx_res = m_pDevice->GetMaxPictureResolutionSupported(m_MfxVideoParams, &maxWidth, &maxHeight);
+            if (MFX_ERR_NONE != mfx_res)
+            {
+                MFX_OMX_AUTO_TRACE_MSG("Failed to get max picture resolution");
+                mfx_res = MFX_ERR_UNSUPPORTED;
+            }
+            if (m_MfxVideoParams.mfx.FrameInfo.Width > maxWidth || m_MfxVideoParams.mfx.FrameInfo.Height > maxHeight)
+            {
+                mfx_res = MFX_ERR_UNSUPPORTED;
+            }
+        }
+        else
+        {
+            mfx_res = MFX_ERR_DEVICE_FAILED;
         }
     }
 
