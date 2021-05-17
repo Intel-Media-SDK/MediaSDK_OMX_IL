@@ -320,13 +320,9 @@ VAProfile MfxOmxDevAndroid::ConvertProfileTypeMFX2VAAPI(OMX_U32 id, OMX_U32 type
 {
     VAProfile vaProfile;
 
-    if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_CONSTRAINED_BASELINE == type))
+    if ((MFX_CODEC_AVC == id) && ((MFX_PROFILE_AVC_CONSTRAINED_BASELINE == type) || (MFX_PROFILE_AVC_BASELINE == type)))
     {
         vaProfile = VAProfileH264ConstrainedBaseline;     
-    }
-    else if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_BASELINE == type))
-    {
-        vaProfile = VAProfileH264Baseline;
     }
     else if ((MFX_CODEC_AVC == id) && (MFX_PROFILE_AVC_MAIN == type))
     {
