@@ -517,6 +517,8 @@ mfxStatus MfxOmxVaapiFrameAllocator::CreateSurfaceFromGralloc(const mfxU8* handl
     surfExtBuf.width = width;
     surfExtBuf.height = height;
     surfExtBuf.pitches[0] = info.pitch;
+    surfExtBuf.offsets[0] = 0;
+    surfExtBuf.offsets[1] = info.pitch * height;
     surfExtBuf.num_planes = 2;
     surfExtBuf.num_buffers = 1;
 #ifdef MFX_OMX_USE_PRIME
