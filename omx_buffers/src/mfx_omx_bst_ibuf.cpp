@@ -234,6 +234,8 @@ mfxStatus MfxOmxFrameConstructor::Load_None(mfxU8* data, mfxU32 size, mfxU64 pts
             std::copy(data, data + size, m_BstBuf.Data + m_BstBuf.DataOffset + m_BstBuf.DataLength);
             m_BstBuf.DataLength += size;
             m_nBstBufCopyBytes += size;
+            if (bCompleteFrame)
+                m_BstBuf.DataFlag |= MFX_BITSTREAM_COMPLETE_FRAME;
         }
         // data copied - sample can be released
         ReleaseSample();
